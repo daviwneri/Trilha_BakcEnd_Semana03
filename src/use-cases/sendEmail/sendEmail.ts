@@ -1,28 +1,34 @@
-import { EmailNotFoundError } from "../errors/email-not-found-error";
-const nodemaler = require("nodemailer")
+import nodemailer from "nodemailer";
+import { EmailNotFoundError } from "../errors/email-error";
 
-let transporter = nodemaler.createTransport({
-    service: "",
-    auth: {
-        user: "",
-        pass: ""
-    },
-});
+export class SendEmail {
+    private transporter;
+    
+    constructor(private email: string) {
+        this.transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "davineri0106@gmail.com",
+                pass: "kpds trsm laxn zkdm"
+            },
+        });
+    }
 
-let options = {
-    from: "",
-    to: "",
-    subject: "",
-    text: ""
-}
+    async send(subject: string, text: string) {
+        const mailOptions = {
+            from: "davineri0106@gmail.com",
+            to: this.email,
+            subject,
+            text
+        };
 
-export const sendEmail = async () => {
-    try {
-        console.log("Enviando email")
-        await transporter.sendEmail(options);
-        console.log("email enviado")
-        process.exit()
-    }catch (err){
-        throw new EmailNotFoundError()
+        try {
+            console.log("Enviando email...");
+            await this.transporter.sendMail(mailOptions);
+            console.log("Email enviado com sucesso.");
+        } catch (err) {
+            console.error("Erro real ao enviar email:", err);
+            throw new EmailNotFoundError();
+        }
     }
 }

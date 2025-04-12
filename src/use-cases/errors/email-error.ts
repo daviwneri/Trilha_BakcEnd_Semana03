@@ -1,5 +1,5 @@
 export class EmailNotFoundError extends Error {
     constructor(){
-        super('Email not found!')
+        super('erro ao enviar o email')
     }
 }
