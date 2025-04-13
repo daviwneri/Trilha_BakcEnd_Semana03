@@ -3,6 +3,7 @@ import { AuthenticateUseCase } from "@/use-cases/authenticate-use-case"
 import { FastifyReply, FastifyRequest } from "fastify"
 import { z } from "zod"
 
+
 export async function authenticate(request:FastifyRequest, reply:FastifyReply){
     const authenticateBodySchema = z.object({
         email: z.string().email(),
@@ -45,6 +46,7 @@ export async function authenticate(request:FastifyRequest, reply:FastifyReply){
                 .send({ token })
 
     } catch (err) {
+        console.log(err)
         return reply.status(401).send('Usuário não autorizado')
     }
 }

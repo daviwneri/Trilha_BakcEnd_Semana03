@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { CommentsRepository } from "@/repositories/comments-repository"
+import { SendEmail } from "./sendEmail/sendEmail"
 
 interface CreateCommentUseCaseRequest {
     content: string,
@@ -34,6 +35,16 @@ export class CreateCommentUseCase {
            userId,
            postId
         })
+
+        const postOwnerId = post.userId
+        const postOwner = await prisma.user.findUnique({
+            where: { id: postOwnerId }
+        })
+        const postOwnerEmail = postOwner!.email
+
+        let notification = new SendEmail(postOwnerEmail)
+        notification.send("Comentário recebido", `${user.name} comentou um post seu!!`)
+
     }
     
 }
